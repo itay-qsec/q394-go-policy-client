@@ -1,8 +1,8 @@
-FROM golang:1.24.5 AS build
-WORKDIR /src
+FROM golang:1.22.5-nanoserver-ltsc2022 AS build
+WORKDIR C:/src
 COPY . .
-RUN CGO_ENABLED=0 go build -o /q394-policy-client .
+RUN go build -o q394-client.exe .
 
-FROM gcr.io/distroless/static-debian12
-COPY --from=build /q394-policy-client /q394-policy-client
-ENTRYPOINT ["/q394-policy-client"]
+FROM mcr.microsoft.com/windows/nanoserver:ltsc2022
+COPY --from=build C:/src/q394-client.exe C:/q394-client.exe
+ENTRYPOINT ["C:\\q394-client.exe"]
